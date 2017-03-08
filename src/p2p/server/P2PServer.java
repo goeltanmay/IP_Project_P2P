@@ -1,4 +1,4 @@
-package p2p.client;
+package p2p.server;
 
 public class P2PServer {
 
