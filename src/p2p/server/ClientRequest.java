@@ -1,20 +1,23 @@
-package p2p.client.util;
+package p2p.server;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class P2PPacket {
+import p2p.client.util.P2PHeader;
+
+public class ClientRequest {
 	String method;
 	Integer rfc_number;
 	String version;
 	
 	List<P2PHeader> headers;
 	
-	public P2PPacket(String method, int rfc_number, String version){
+	public ClientRequest(String method, int rfc_number, String version){
 		this.method = method;
 		this.rfc_number = rfc_number;
 		this.version = version;
-		this.headers = new ArrayList<P2PHeader>();
+		this.headers = new ArrayList<>();
+		
 	}
 	
 	public void addHeader(String headerType, String value){

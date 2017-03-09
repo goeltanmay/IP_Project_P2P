@@ -12,12 +12,18 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Stream;import sun.print.resources.serviceui;
 
 public class P2PServer {
-
+	public static volatile List<RFC> rfcs;
+	public static volatile List<Client> peers;
+	public static List<ConnectionHandler> threads;
+	
 	public static void main(String args[]) throws IOException{
-		System.out.println(" Hello World ");
+		rfcs = new LinkedList<>();
+		peers = new LinkedList<>();
 		ServerSocket listener = new ServerSocket(7734);
 		while(true){
 			
@@ -25,8 +31,9 @@ public class P2PServer {
 			Socket s = listener.accept();
 			DataInputStream din = new DataInputStream(s.getInputStream());
 			BufferedReader buff = new BufferedReader(new InputStreamReader(din));
-			System.out.println(buff.readLine());
-			System.out.println("here");
+			ClientRequest c = P2PParser.parse(buff.readLine());
+			
+			System.out.println(c.toString());
 			DataOutputStream outputStream = new DataOutputStream(s.getOutputStream());
 			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
 			BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
