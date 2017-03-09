@@ -12,6 +12,10 @@ import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
+import p2p.client.util.Methods;
+import p2p.client.util.P2PPacket;
+import p2p.client.util.Version;
+
 public class P2PClient {
 
 	public static void main(String args[]) throws UnknownHostException, IOException{
@@ -23,7 +27,11 @@ public class P2PClient {
 		InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
 		
 		BufferedReader buff = new BufferedReader(inputStreamReader);
-		outputStream.println("Hello server\n");
+		P2PPacket packet = new P2PPacket(Methods.ADD, 2177, Version.version);
+		packet.addHeader("HOST", "127.0.0.1");
+		packet.addHeader("PORT", Integer.toString(s.getPort()));
+		packet.addHeader("TITLE", "Akriti's RFC");
+		outputStream.println(packet.toString());
 		outputStream.flush();
 	
 		
