@@ -30,12 +30,15 @@ public class P2PClient {
 		P2PPacket packet = new P2PPacket(Methods.ADD, 2177, Version.version);
 		packet.addHeader("HOST", "127.0.0.1");
 		packet.addHeader("PORT", Integer.toString(s.getPort()));
-		packet.addHeader("TITLE", "Akriti's RFC");
+		packet.addHeader("TITLE", "Akriti's RFC 2");
+		System.out.println(packet.toString());
 		outputStream.println(packet.toString());
 		outputStream.flush();
-	
 		
-		System.out.println(buff.readLine());
+		outputStream.println(packet.toString());
+		outputStream.flush();
+		
+//		System.out.println(buff.readLine());
 		s.close();
 		
 	}
