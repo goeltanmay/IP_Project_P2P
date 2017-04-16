@@ -79,7 +79,6 @@ public class P2PServer implements P2PServerDataInterface{
 
 	@Override
 	public HashMap<RFC, List<Client>> listAll() {
-		// TODO Auto-generated method stub
 		return rfcs;
 	}
 

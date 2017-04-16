@@ -8,6 +8,8 @@ public class P2PParser {
 		for (int i=1; i<lines.length; i++){
 			String[] line = lines[i].split("<sp>");
 			req.addHeader(line[0], line[1]);
+			if(line[0].equalsIgnoreCase("port"))
+				req.clientPort = line[1];
 		}
 		return req;
 	}

@@ -33,9 +33,11 @@ public class P2PClientConnectionHandler implements Runnable {
 			client = new Client(s.getInetAddress().getHostName(), clientportname);
 			p2pData.addPeer(client);
 			System.out.println("Peer Added");
+			
 			while(request != null){
 				System.out.println(request);
 				ClientRequest req = P2PParser.parse(request);
+				client.clientport = req.clientPort;
 				String response = req.handle(p2pData);
 				System.out.println(response);
 				output.println(response);
