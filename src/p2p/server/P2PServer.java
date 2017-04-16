@@ -13,19 +13,20 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;import sun.print.resources.serviceui;
 
 public class P2PServer implements P2PServerDataInterface{
-	public static volatile List<RFC> rfcs;
+	public static volatile HashMap<RFC, List<Client>> rfcs;
 	public static volatile List<Client> peers;
 	ServerSocket listener;
 	//public static List<ConnectionHandler> threads;
 	
 	public static void main(String args[]) throws IOException {
-		rfcs = new LinkedList<>();
+		rfcs = new HashMap<>();
 		peers = new LinkedList<>();
 		int port = 7734;
 		new P2PServer(port);
@@ -43,9 +44,45 @@ public class P2PServer implements P2PServerDataInterface{
 
 	@Override
 	public boolean addPeer(Client client) {
-		// TODO Auto-generated method stub
-//		System.out.println(client.toString());
 		return peers.add(client);
 	}
+
+	@Override
+	public boolean removePeer(Client client) {
+		for (RFC i : rfcs.keySet()){
+			if (rfcs.get(i).contains(client))
+				rfcs.get(i).remove(client);
+		}
+		
+		return peers.remove(client);
+	}
+
+	@Override
+	public boolean addRfc(RFC rfc) {
+		if(!rfcs.containsKey(rfc)) {
+			rfcs.put(rfc, new LinkedList<Client>());
+		}
+		return true;
+	}
+
+	@Override
+	public boolean addRFCClient(RFC rfc, Client client) {
+		return rfcs.get(rfc).add(client);
+	}
+
+	@Override
+	public List<Client> lookupRFC(RFC rfc) {
+		if (rfcs.containsKey(rfc))
+			return rfcs.get(rfc);
+		return null;
+	}
+
+	@Override
+	public HashMap<RFC, List<Client>> listAll() {
+		// TODO Auto-generated method stub
+		return rfcs;
+	}
+
+	
 }
 
