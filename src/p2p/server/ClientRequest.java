@@ -1,6 +1,7 @@
 package p2p.server;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import p2p.client.util.P2PHeader;
@@ -105,7 +106,12 @@ public class ClientRequest {
 		else if (this.method.equalsIgnoreCase("list")) {
 			response.status_code = "200";
 			response.description = "OK";
-			
+			HashMap<RFC, List<Client>> data = p2pData.listAll();
+			for (RFC i : data.keySet()){
+				for (Client c : data.get(i)){
+					response.data.add(i.toString() + "<sp>" + c.toString());
+				}
+			}
 		}
 		
 		return response.toString();
