@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.stream.Stream;
 
 import p2p.client.util.Methods;
@@ -25,15 +26,16 @@ public class P2PClient {
 		Random ran = new Random();
 		int serverPort = ran.nextInt(50000)+10000; 
 		ServerSocket serverSocket;
+		Thread t;
 		try {
 			serverSocket = new ServerSocket(serverPort);
-			Thread t = new Thread(new P2PServerSocket(serverSocket));
+			t = new Thread(new P2PServerSocket(serverSocket));
 			t.start();
 			System.out.println("Listening at port " + Integer.toString(serverPort));
 		} catch(Exception e) {
 			serverPort = ran.nextInt(50000)+10000;
 			serverSocket = new ServerSocket(serverPort);
-			Thread t = new Thread(new P2PServerSocket(serverSocket));
+			t = new Thread(new P2PServerSocket(serverSocket));
 			System.out.println("Listening at port " + Integer.toString(serverPort));
 			t.start();
 		}
@@ -44,6 +46,9 @@ public class P2PClient {
 		InputStream inputStream = s.getInputStream();
 		InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
 		BufferedReader buff = new BufferedReader(inputStreamReader);
+		Scanner scanner = new Scanner(System.in);
+		int n=1;
+		
 		P2PPacket packet = new P2PPacket(Methods.ADD, 2177, Version.version);
 		packet.addHeader("HOST", "127.0.0.1");
 		packet.addHeader("PORT", Integer.toString(serverPort));
@@ -52,7 +57,43 @@ public class P2PClient {
 		outputStream.println(packet.toString());
 		outputStream.flush();
 		
-		System.out.println(buff.readLine());
+		
+		while(n <= 3 && n >= 1){
+			System.out.println(" ------- Main Menu ------- ");
+			System.out.println(" 1. List all RFCs at Server ");
+			System.out.println(" 2. Lookup RFC at server");
+			System.out.println(" 3. Get an RFC from P2P peer ");
+			System.out.println(" Other.  EXIT! ");
+			
+			n = scanner.nextInt();
+			switch(n) {
+				case 1:
+					P2PPacket packet1 = new P2PPacket(Methods.LIST, 2178, Version.version);
+					packet1.addHeader("HOST", "127.0.0.1");
+					packet1.addHeader("PORT", Integer.toString(serverPort));
+					packet1.addHeader("TITLE", "Akriti's RFC 3");
+					outputStream.println(packet1.toString());
+					outputStream.flush();
+					System.out.println(buff.readLine());
+					break;
+				case 2:
+					System.out.println(" RFC Number to lookup : ");
+					int rfcno = scanner.nextInt();
+					P2PPacket packet2 = new P2PPacket(Methods.LOOKUP, rfcno, Version.version);
+					packet2.addHeader("HOST", "127.0.0.1");
+					packet2.addHeader("PORT", Integer.toString(serverPort));
+					packet2.addHeader("TITLE", "Akriti's RFC 2");
+					outputStream.println(packet2.toString());
+					outputStream.flush();
+					System.out.println(buff.readLine());
+					break;
+				case 3 :
+					// TODO : implement P2P interaction;
+					break;
+				default : break;
+			}
+		}
+		t.stop();
 		s.close();
 		
 	}

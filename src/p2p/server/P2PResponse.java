@@ -12,7 +12,7 @@ public class P2PResponse {
 	public String toString(){
 		String response = version + "<sp>" + status_code + "<sp>" + description + "<cr><lf>";
 		for (String i : data){
-			response = response + data + "<cr><lf>";
+			response = response + i + "<cr><lf>";
 		}
 		
 		return response;
