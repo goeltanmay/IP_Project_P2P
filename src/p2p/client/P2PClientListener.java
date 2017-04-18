@@ -27,8 +27,9 @@ public class P2PClientListener implements Runnable{
 			request = din.readLine();
 			while(request != null){
 				System.out.println(request);
+				output.println("got it");
 			}
-			
+			s.close();
 	 	} catch (IOException e) {
 	 		e.printStackTrace();
 	 	}

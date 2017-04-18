@@ -89,6 +89,27 @@ public class P2PClient {
 					break;
 				case 3 :
 					// TODO : implement P2P interaction;
+					System.out.println(" RFC Number to lookup : ");
+					int rfcno1 = scanner.nextInt();
+					System.out.println(" IP address of the host : ");
+					String ip = scanner.next();
+					System.out.println(" Port number : ");
+					int port = scanner.nextInt();
+					
+					Socket s2 = new Socket(ip,port);
+					
+					PrintStream outputStream2 = new PrintStream(s2.getOutputStream());
+					InputStream inputStream2 = s2.getInputStream();
+					InputStreamReader inputStreamReader2 = new InputStreamReader(inputStream2);
+					BufferedReader buff2 = new BufferedReader(inputStreamReader2);
+					
+					P2PPacket packet3 = new P2PPacket(Methods.DOWNLOAD, rfcno1, Version.version);
+					packet3.addHeader("HOST", "127.0.0.1");
+					packet3.addHeader("PORT", Integer.toString(s2.getLocalPort()));
+					
+					outputStream2.println(packet3.toString());
+					String response = buff2.readLine();
+					System.out.println(response);
 					break;
 				default : break;
 			}
