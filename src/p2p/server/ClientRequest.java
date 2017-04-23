@@ -8,7 +8,7 @@ import p2p.client.util.P2PHeader;
 
 public class ClientRequest {
 	String method;
-	Integer rfc_number;
+	public Integer rfc_number;
 	String version;
 	public String clientPort;
 	List<P2PHeader> headers;

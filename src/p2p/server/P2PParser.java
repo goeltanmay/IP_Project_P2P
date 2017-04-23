@@ -1,5 +1,7 @@
 package p2p.server;
 
+import p2p.client.util.P2PResponse;
+
 public class P2PParser {
 	public static ClientRequest parse(String input){
 		String[] lines = input.split("<cr><lf>");
@@ -13,6 +15,5 @@ public class P2PParser {
 		}
 		return req;
 	}
-	
 	
 }

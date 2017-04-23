@@ -1,27 +1,30 @@
 package p2p.client;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 import p2p.client.util.Methods;
 import p2p.client.util.P2PPacket;
 import p2p.client.util.Version;
 
 public class P2PClient {
-
+	private static final String FILENAME = "/Users/tanmaygoel/clientfolders/";
 	public static void main(String args[]) throws UnknownHostException, IOException{
+		System.out.println("Which folder does this client have? ");
+		Scanner scanner = new Scanner(System.in);
+		Integer foldernumber = scanner.nextInt();
+		String folderName = FILENAME + foldernumber.toString() + "/";
+		
+			
 		
 		Random ran = new Random();
 		int serverPort = ran.nextInt(50000)+10000; 
@@ -29,13 +32,13 @@ public class P2PClient {
 		Thread t;
 		try {
 			serverSocket = new ServerSocket(serverPort);
-			t = new Thread(new P2PServerSocket(serverSocket));
+			t = new Thread(new P2PServerSocket(serverSocket, folderName));
 			t.start();
 			System.out.println("Listening at port " + Integer.toString(serverPort));
 		} catch(Exception e) {
 			serverPort = ran.nextInt(50000)+10000;
 			serverSocket = new ServerSocket(serverPort);
-			t = new Thread(new P2PServerSocket(serverSocket));
+			t = new Thread(new P2PServerSocket(serverSocket, folderName));
 			System.out.println("Listening at port " + Integer.toString(serverPort));
 			t.start();
 		}
@@ -46,17 +49,20 @@ public class P2PClient {
 		InputStream inputStream = s.getInputStream();
 		InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
 		BufferedReader buff = new BufferedReader(inputStreamReader);
-		Scanner scanner = new Scanner(System.in);
 		int n=1;
 		
-		P2PPacket packet = new P2PPacket(Methods.ADD, 2177, Version.version);
-		packet.addHeader("HOST", "127.0.0.1");
-		packet.addHeader("PORT", Integer.toString(serverPort));
-		packet.addHeader("TITLE", "Akriti's RFC 2");
-		System.out.println(packet.toString());
-		outputStream.println(packet.toString());
-		outputStream.flush();
-		
+		File folder = new File(folderName);
+		File[] listOfFiles = folder.listFiles();
+		for (int i=1; i<listOfFiles.length; i++){
+			Integer rfcNo = Integer.parseInt(listOfFiles[i].getName().substring(3, (int) (listOfFiles[i].getName().length()-4)));
+			P2PPacket packet = new P2PPacket(Methods.ADD, rfcNo, Version.version);
+			packet.addHeader("HOST", "127.0.0.1");
+			packet.addHeader("PORT", Integer.toString(serverPort));
+			packet.addHeader("TITLE", listOfFiles[i].getName());
+			outputStream.println(packet.toString());
+			outputStream.flush();
+			System.out.println(buff.readLine());
+		}
 		
 		while(n <= 3 && n >= 1){
 			System.out.println(" ------- Main Menu ------- ");
@@ -116,6 +122,7 @@ public class P2PClient {
 		}
 		t.stop();
 		s.close();
+		scanner.close();
 		
 	}
 }
