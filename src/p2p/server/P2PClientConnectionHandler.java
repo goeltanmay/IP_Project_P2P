@@ -18,25 +18,27 @@ public class P2PClientConnectionHandler implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		int clientPort=0;
+//		int clientPort=0;
 		String request;
 		Client client;
 		DataInputStream din;
 //		ObjectInputStream input = null;
 		PrintStream output = null;
 	 try {
-			clientPort= s.getPort();
+//			clientPort= s.getPort();
 			din = new DataInputStream(s.getInputStream());
 			output= new PrintStream(s.getOutputStream());
-			String clientportname = Integer.toString(clientPort);
+//			String clientportname = Integer.toString(clientPort);
 			request = din.readLine();
-			client = new Client(s.getInetAddress().getHostName(), clientportname);
+			ClientRequest req = P2PParser.parse(request);
+			
+			client = new Client("127.0.0.1", req.clientPort);
 			p2pData.addPeer(client);
 			System.out.println("Peer Added");
 			
 			while(request != null){
-				System.out.println(request);
-				ClientRequest req = P2PParser.parse(request);
+//				System.out.println(request);
+				req = P2PParser.parse(request);
 				client.clientport = req.clientPort;
 				String response = req.handle(p2pData);
 				System.out.println(response);
