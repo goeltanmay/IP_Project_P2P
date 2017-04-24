@@ -24,6 +24,7 @@ public class P2PResponse {
 						break;
 			case 404 : response += "NOT FOUND" ; 
 						break;
+			case 505 : response += "VERSION NOT SUPPORTED";
 		}
 		response += "<cr><lf>";
 		response += "<cr><lf>";

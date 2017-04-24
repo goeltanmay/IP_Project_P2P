@@ -1,11 +1,13 @@
 package p2p.client;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -106,15 +108,30 @@ public class P2PClient {
 					
 					PrintStream outputStream2 = new PrintStream(s2.getOutputStream());
 					InputStream inputStream2 = s2.getInputStream();
-					InputStreamReader inputStreamReader2 = new InputStreamReader(inputStream2);
-					BufferedReader buff2 = new BufferedReader(inputStreamReader2);
+					DataInputStream inputStreamReader2 = new DataInputStream(inputStream2);
+//					BufferedReader buff2 = new BufferedReader(inputStreamReader2);
 					
 					P2PPacket packet3 = new P2PPacket(Methods.DOWNLOAD, rfcno1, Version.version);
 					packet3.addHeader("HOST", "127.0.0.1");
 					packet3.addHeader("PORT", Integer.toString(s2.getLocalPort()));
 					
 					outputStream2.println(packet3.toString());
-					String response = buff2.readLine();
+					String response = inputStreamReader2.readUTF();
+					String[] lines2 = response.split("<cr><lf>");
+					String[] headers = lines2[0].split("<sp>");
+					if(headers[1].equals("200")){
+						String data = "";
+						for(int i=2; i<lines2.length; i++){
+							data += lines2[i];
+						}
+						try{
+						    PrintWriter writer = new PrintWriter(folderName + "/rfc"+rfcno1+".txt" , "UTF-8");
+						    writer.println(data);
+						    writer.close();
+						} catch (IOException e) {
+						   // do something
+						}
+					}
 					System.out.println(response);
 					break;
 				default : break;

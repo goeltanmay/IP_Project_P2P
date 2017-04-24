@@ -50,7 +50,7 @@ public class P2PClientListener implements Runnable{
 			P2PResponse response = new P2PResponse();
 			boolean found = false;
 			for(int i=0; i< listOfFiles.length; i++){
-				if(listOfFiles[i].getName().contains(req.rfc_number.toString())){
+				if(listOfFiles[i].getName().equals("rfc" + req.rfc_number.toString() + ".txt")){
 					FileReader f = new FileReader(listOfFiles[i].getPath());
 					BufferedReader buff = new BufferedReader(f);
 					found = true;
@@ -60,10 +60,14 @@ public class P2PClientListener implements Runnable{
 					response.data = "";
 					String line = "";
 					while((line = buff.readLine()) != null) {
-		                response.data += line;
-		            }   
+		                response.data += line + "\n";
+		            }
+					buff.close();
+					f.close();
 				}
 			}
+			if(!found)
+				response.status_code=404;
 			
 			output.writeUTF(response.toString());
 			

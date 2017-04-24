@@ -96,8 +96,9 @@ public class ClientRequest {
 				return response.toString();
 			}
 			else {
+				RFC serverRfc = p2pData.getRFC(rfc);
 				for (Client i : results){
-					response.data.add( rfc.toString() + "<sp>" + i.toString() );
+					response.data.add( serverRfc.toString() + "<sp>" + i.toString() );
 				}
 				return response.toString();
 			}

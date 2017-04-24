@@ -82,6 +82,16 @@ public class P2PServer implements P2PServerDataInterface{
 		return rfcs;
 	}
 
+	@Override
+	public RFC getRFC(RFC rfc) {
+		// TODO Auto-generated method stub
+		for(RFC i : rfcs.keySet()){
+			if (i.equals(rfc))
+				return i;
+		}
+		return null;
+	}
+
 	
 }
 

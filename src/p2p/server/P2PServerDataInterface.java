@@ -15,6 +15,8 @@ public interface P2PServerDataInterface {
 	
 	public List<Client> lookupRFC(RFC rfc);
 	
+	public RFC getRFC(RFC rfc);
+	
 	public HashMap<RFC,List<Client>> listAll();
 		
 }
