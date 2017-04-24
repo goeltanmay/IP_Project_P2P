@@ -48,26 +48,33 @@ public class P2PClientListener implements Runnable{
 			File folder = new File(this.folderName);
 			File[] listOfFiles = folder.listFiles();
 			P2PResponse response = new P2PResponse();
-			boolean found = false;
-			for(int i=0; i< listOfFiles.length; i++){
-				if(listOfFiles[i].getName().equals("rfc" + req.rfc_number.toString() + ".txt")){
-					FileReader f = new FileReader(listOfFiles[i].getPath());
-					BufferedReader buff = new BufferedReader(f);
-					found = true;
-					response.status_code=200;
-					response.version = "P2P-CI/1.0";
-					response.time = Calendar.getInstance().getTime();
-					response.data = "";
-					String line = "";
-					while((line = buff.readLine()) != null) {
-		                response.data += line + "\n";
-		            }
-					buff.close();
-					f.close();
-				}
+			if(!req.version.equalsIgnoreCase("P2P-CI/1.0")){
+				response.status_code = 505;
+				response.version = "P2P-CI/1.0";
 			}
-			if(!found)
-				response.status_code=404;
+				
+			else {
+				boolean found = false;
+				for(int i=0; i< listOfFiles.length; i++){
+					if(listOfFiles[i].getName().equals("rfc" + req.rfc_number.toString() + ".txt")){
+						FileReader f = new FileReader(listOfFiles[i].getPath());
+						BufferedReader buff = new BufferedReader(f);
+						found = true;
+						response.status_code=200;
+						response.version = "P2P-CI/1.0";
+						response.time = Calendar.getInstance().getTime();
+						response.data = "";
+						String line = "";
+						while((line = buff.readLine()) != null) {
+			                response.data += line + "\n";
+			            }
+						buff.close();
+						f.close();
+					}
+				}
+				if(!found)
+					response.status_code=404;
+			}
 			
 			output.writeUTF(response.toString());
 			
