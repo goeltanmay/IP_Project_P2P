@@ -49,13 +49,14 @@ public class P2PServer implements P2PServerDataInterface{
 
 	@Override
 	public boolean removePeer(Client client) {
-		for (RFC i : rfcs.keySet()){
+		Iterator<RFC> iter = rfcs.keySet().iterator();
+		while (iter.hasNext()){
+			RFC i = iter.next();
 			if (rfcs.get(i).contains(client)){
 				rfcs.get(i).remove(client);
 				if (rfcs.get(i).size() == 0)
-					rfcs.remove(i);
+					iter.remove();
 			}
-				
 		}
 		
 		return peers.remove(client);

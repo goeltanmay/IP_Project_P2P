@@ -132,7 +132,14 @@ public class P2PClient {
 						   // do something
 						}
 					}
-					System.out.println(response);
+//					System.out.println(response);
+					P2PPacket packet = new P2PPacket(Methods.ADD, rfcno1, Version.version);
+					packet.addHeader("HOST", "127.0.0.1");
+					packet.addHeader("PORT", Integer.toString(serverPort));
+					packet.addHeader("TITLE", "/rfc"+rfcno1+".txt");
+					outputStream.println(packet.toString());
+					outputStream.flush();
+					System.out.println(buff.readLine());
 					break;
 				default : break;
 			}
