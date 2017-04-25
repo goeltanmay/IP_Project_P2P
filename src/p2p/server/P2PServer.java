@@ -72,7 +72,9 @@ public class P2PServer implements P2PServerDataInterface{
 
 	@Override
 	public boolean addRFCClient(RFC rfc, Client client) {
-		return rfcs.get(rfc).add(client);
+		if(!rfcs.get(rfc).contains(client))
+			return rfcs.get(rfc).add(client);
+		return false;
 	}
 
 	@Override
