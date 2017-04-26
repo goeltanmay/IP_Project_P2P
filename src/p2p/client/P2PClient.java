@@ -26,7 +26,7 @@ public class P2PClient {
 		Scanner scanner = new Scanner(System.in);
 		Integer foldernumber = scanner.nextInt();
 		
-		String localIPAddress = InetAddress.getLocalHost().getHostAddress();
+		
 		
 		System.out.println("What is the IP address of the server ");
 		String serverIPAddress = scanner.next();
@@ -52,7 +52,7 @@ public class P2PClient {
 		}
 		
 		Socket s = new Socket(serverIPAddress, 7734);
-		
+		String localIPAddress = s.getLocalAddress().getHostAddress();
 		PrintStream outputStream = new PrintStream(s.getOutputStream());
 		InputStream inputStream = s.getInputStream();
 		InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
