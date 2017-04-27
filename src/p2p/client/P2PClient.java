@@ -20,7 +20,7 @@ import p2p.client.util.P2PPacket;
 import p2p.client.util.Version;
 
 public class P2PClient {
-	private static final String FILENAME = "/Users/tanmaygoel/clientfolders/";
+	private static final String FILENAME = "/Users/tanmaygoel/clientfolders/IP_Project_P2P/";
 	public static void main(String args[]) throws UnknownHostException, IOException{
 		System.out.println("Which folder does this client have? ");
 		Scanner scanner = new Scanner(System.in);

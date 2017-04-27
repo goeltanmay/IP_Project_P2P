@@ -13,3 +13,7 @@ The client has 2 parts. One thread that communicates with the server and make re
 Once all files are added, the user gets a promt. He can choose one of 3 options. List all the info at server, lookup a certain RFC at the server and get an RFC from another client. List option queries the server and displays the output. Lookup asks for an RFC number to lookup on the server and returns the list of clients that have the rfc. Finally the get option asks for an RFC number to get from another client, and that client's ip address and port number. The file is then saved in the folder specified at startup, and an add request is sent to the server to let it know that this client also has the rfc now.
 
 ### Instructions to run
+1. Clone or unzip the project.
+2. Open Eclipse, create a new java project with the same name and location as the unzipped project.
+3. Run the server - Run P2PServer.java. Run ifconfig/ipconfig in terminal to check the server's IP address.
+4. Run the client - Run P2PClient.java. Use the folders in 'clientfolders' folder to access the rfc. Folder 1 contains first 500 RFCs. Note these are real RFCs.
