@@ -1,5 +1,9 @@
 # IP_Project_P2P
 
+### Team 
+Akriti Bilala
+Tanmay Goel
+
 We have implemeneted a P2P system. There are 2 parts, the P2P server and the P2P clients. The server is the central repository that keeps track of which files each of the peers (clients) have in their systems. The clients can then query the server to check what files are within the system, and which files are available with which peers. The system uses TCP for handling the queries and data transfer so as to ensure reliable communication.
 
 ### The server
