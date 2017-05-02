@@ -7,6 +7,8 @@ import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
 
+import p2p.client.util.P2PHeader;
+
 public class P2PClientConnectionHandler implements Runnable {
 	Socket s;
 	P2PServerDataInterface p2pData;
@@ -18,16 +20,21 @@ public class P2PClientConnectionHandler implements Runnable {
 	@Override
 	public void run() {
 		String request;
-		Client client;
+		Client client = null;
 		DataInputStream din;
 		PrintStream output = null;
 	 try {
 			din = new DataInputStream(s.getInputStream());
 			output= new PrintStream(s.getOutputStream());
+			String hostname = "";
 			request = din.readLine();
 			ClientRequest req = P2PParser.parse(request);
-			
-			client = new Client(s.getInetAddress().getHostAddress() , req.clientPort);
+			for(P2PHeader h : req.headers){
+				if(h.field_name.equalsIgnoreCase("host")){
+					hostname = h.value;
+				}
+			}
+			client = new Client(hostname , req.clientPort);
 			p2pData.addPeer(client);
 			System.out.println("Peer Added");
 			
@@ -41,13 +48,19 @@ public class P2PClientConnectionHandler implements Runnable {
 				request = din.readLine();
 			}
 			
-			p2pData.removePeer(client);
-			System.out.println("Peer Removed");
-			s.close();
 			
-	 	} catch (IOException e) {
+			
+	 	} catch (Exception e) {
 	 		e.printStackTrace();
 	 	}
+	 	p2pData.removePeer(client);
+		System.out.println("Peer Removed");
+		try {
+			s.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
